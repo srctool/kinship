@@ -39,6 +39,6 @@ Dirancang dengan mempertimbangkan efisiensi dan keringanan, dapat diperluas (*ex
 
 ```bash
 git clone https://github.com/cacing69/Kinship.git
-cd kinship
+cd Kinship
 npm install
 npm run dev

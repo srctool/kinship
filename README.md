@@ -39,6 +39,6 @@ Designed to be lightweight, extensible, and user-friendly, whether you're tracin
 
 ```bash
 git clone https://github.com/cacing69/Kinship.git
-cd kinship
+cd Kinship
 npm install
 npm run dev
