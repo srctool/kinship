@@ -1,0 +1,132 @@
+{
+    "persons": [
+        {
+            "id": "P1",
+            "names": [
+                {
+                    "nameForms": [
+                        {
+                            "fullText": "John Doe"
+                        }
+                    ]
+                }
+            ],
+            "gender": {
+                "type": "http://gedcomx.org/Male"
+            },
+            "facts": [
+                {
+                    "type": "http://gedcomx.org/Birth",
+                    "date": {
+                        "original": "1950-05-20"
+                    },
+                    "place": {
+                        "original": "New York, USA"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "P2",
+            "names": [
+                {
+                    "nameForms": [
+                        {
+                            "fullText": "Jane Smith"
+                        }
+                    ]
+                }
+            ],
+            "gender": {
+                "type": "http://gedcomx.org/Female"
+            },
+            "facts": [
+                {
+                    "type": "http://gedcomx.org/Birth",
+                    "date": {
+                        "original": "1955-08-10"
+                    },
+                    "place": {
+                        "original": "Boston, USA"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "P3",
+            "names": [
+                {
+                    "nameForms": [
+                        {
+                            "fullText": "Emily Doe"
+                        }
+                    ]
+                }
+            ],
+            "gender": {
+                "type": "http://gedcomx.org/Female"
+            },
+            "facts": [
+                {
+                    "type": "http://gedcomx.org/Birth",
+                    "date": {
+                        "original": "1980-03-15"
+                    },
+                    "place": {
+                        "original": "Chicago, USA"
+                    }
+                }
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "id": "R1",
+            "type": "http://gedcomx.org/Couple",
+            "person1": {
+                "resource": "#P1"
+            },
+            "person2": {
+                "resource": "#P2"
+            },
+            "facts": [
+                {
+                    "type": "http://gedcomx.org/Marriage",
+                    "date": {
+                        "original": "1975-06-30"
+                    },
+                    "place": {
+                        "original": "New York, USA"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "R2",
+            "type": "http://gedcomx.org/ParentChild",
+            "person1": {
+                "resource": "#P1"
+            },
+            "person2": {
+                "resource": "#P3"
+            }
+        },
+        {
+            "id": "R3",
+            "type": "http://gedcomx.org/ParentChild",
+            "person1": {
+                "resource": "#P2"
+            },
+            "person2": {
+                "resource": "#P3"
+            }
+        }
+    ],
+    "sources": [
+        {
+            "id": "S1",
+            "description": "Birth certificate for Emily Doe",
+            "about": "https://example.com/emily-birth-record"
+        }
+    ]
+}
