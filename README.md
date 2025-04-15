@@ -1,9 +1,14 @@
 # Kinship — Family Tree Application with GEDCOM Support
 
-**Kinship** is an open-source family tree application built to help you create, explore, and share genealogical relationships.
-It fully supports **GEDCOM (.ged)** file input and output for compatibility with other genealogy software.
+<p align="center">
+  [<a href="docs/README-ID.md">Indonesian</a>]
+</p>
 
-Designed to be lightweight, extensible, and user-friendly — whether you're tracing your ancestry, building a community archive, or developing a genealogy-based app.
+**Kinship** is a modern, open-source family tree application built to help you create, explore, and share genealogical relationships.
+
+It fully supports **GEDCOM (.ged)** and **GEDCOM X (.json)** file input and output for compatibility with other genealogy software.
+
+Designed to be lightweight, extensible, and user-friendly, whether you're tracing your ancestry, building a community archive, or developing a genealogy-based app.
 
 ---
 
@@ -21,25 +26,12 @@ Designed to be lightweight, extensible, and user-friendly — whether you're tra
 
 > Soon
 
----
-
-## GEDCOM Support
-
-This app supports **GEDCOM 5.5/5.5.1** format, including tags such as:
-
-- `INDI` (Individual)
-- `FAM` (Family)
-- `BIRT`, `DEAT`, `MARR`, `DIV`
-- `FAMC` (Child in family), `FAMS` (Spouse in family)
-- `NOTE`, `PLAC`, and other events
-
----
-
 ## Tech Stack
 
 - **Frontend**: React
 - **GEDCOM Parser**: Custom-built or 3rd-party library
 - **Storage**: LocalStorage & IndexDB
+- **UI**: Mantine
 
 ---
 
