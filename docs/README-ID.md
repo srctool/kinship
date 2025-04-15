@@ -1,7 +1,7 @@
 # Kinship — Aplikasi Silsilah Keluarga dengan Dukungan GEDCOM
 
 <p align="center">
-  [<a href="README.md">English</a>]
+  [<a href="../README.md">English</a>]
 </p>
 
 **Kinship** adalah aplikasi *open source* modern silsilah keluarga yang dibangun untuk membantu kamu membuat, menjelajahi, dan berbagi hubungan asal-usul silsilah keluarga.
