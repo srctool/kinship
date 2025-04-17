@@ -1,6 +1,13 @@
 import { Attribution } from './attribution';
 import { Qualifier } from './qualifier';
 
+
+/**
+ * The "SourceReference" Data Type
+ * https://github.com/FamilySearch/gedcomx/blob/master/specifications/conceptual-model-specification.md#source-reference
+ *
+ * The SourceReference data type defines a reference to a source description.
+ */
 export interface SourceReference {
     // Reference to a description of the source being referenced (URI).
     description?: string;
