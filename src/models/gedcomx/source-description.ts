@@ -23,7 +23,7 @@ export interface SourceDescription {
     // The citation(s) for this source.
     citations?: SourceCitation[];
 
-    // A hint about the media type of the resource being described.
+    // A hint about the media type (e.g., "image/jpeg", "video/mp4").
     mediaType?: string;
 
     // A uniform resource identifier (URI) for the resource being described.
