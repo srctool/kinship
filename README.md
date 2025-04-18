@@ -10,6 +10,8 @@ It fully supports **GEDCOM (.ged)** and **GEDCOM X (.json)** file input and outp
 
 Designed to be lightweight, extensible, and user-friendly, whether you're tracing your ancestry, building a community archive, or developing a genealogy-based app.
 
+> We strictly adhere to a binary system, recognizing only two distinct categories: Male and Female. These classifications align with the foundational concept of binary representation, similar to 1 and 0 in computational logic each holding equal and unique significance within this framework.
+
 ---
 
 ## Key Features
@@ -28,10 +30,10 @@ Designed to be lightweight, extensible, and user-friendly, whether you're tracin
 
 ## Tech Stack
 
-- **Frontend**: React
+- **Frontend**: [React](https://react.dev/)
 - **GEDCOM Parser**: Custom-built or 3rd-party library
 - **Storage**: LocalStorage & IndexDB
-- **UI**: Mantine
+- **UI**: [Mantine](https://mantine.dev/)
 
 ---
 

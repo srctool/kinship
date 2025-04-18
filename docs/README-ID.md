@@ -10,6 +10,8 @@ Aplikasi ini sepenuhnya mendukung file **GEDCOM (.ged)** dan **GEDCOM X (.json)*
 
 Dirancang dengan mempertimbangkan efisiensi dan keringanan, dapat diperluas (*extensible*), dan mudah digunakan, baik ketika kamu melacak silsilah keluarga, membangun arsip komunitas, atau mengembangkan aplikasi berbasis genealogi.
 
+>Kami mengikuti sistem biner secara konsisten, di mana hanya ada dua kategori yang diakui: laki-laki dan perempuan. Pembagian ini sejalan dengan konsep dasar dalam logika biner, seperti angka 1 dan 0 dalam dunia komputer yang masing-masing punya peran dan makna unik dalam sistem tersebut.
+
 ---
 
 ## Fitur Unggulan
@@ -28,10 +30,10 @@ Dirancang dengan mempertimbangkan efisiensi dan keringanan, dapat diperluas (*ex
 
 ## Stack Teknologi
 
-- **Frontend**: React
+- **Frontend**: [React](https://react.dev/)
 - **GEDCOM Parser**: Custom-built or 3rd-party library
 - **Storage**: LocalStorage & IndexDB
-- **UI**: Mantine
+- **UI**: [Mantine](https://mantine.dev/)
 
 ---
 
