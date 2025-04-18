@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "npm run eslint && npm run stylelint",
-    "eslint": "eslint . --cache",
-    "stylelint": "stylelint \"**/*.css\" --cache",
+    "eslint": "eslint .",
+    "stylelint": "stylelint \"**/*.css\"",
     "prettier": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
     "prepare": "husky"
