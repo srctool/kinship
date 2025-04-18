@@ -30,10 +30,10 @@ Dirancang dengan mempertimbangkan efisiensi dan keringanan, dapat diperluas (*ex
 
 ## Stack Teknologi
 
-- **Frontend**: React
+- **Frontend**: [React](https://react.dev/)
 - **GEDCOM Parser**: Custom-built or 3rd-party library
 - **Storage**: LocalStorage & IndexDB
-- **UI**: Mantine
+- **UI**: [Mantine](https://mantine.dev/)
 
 ---
 
