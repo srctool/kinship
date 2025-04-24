@@ -15,6 +15,7 @@ import {
 import useFormField from "./use-form-field";
 import { FormField } from "./form";
 import { FieldPath, FieldValues } from "react-hook-form";
+import { DateInput, DateInputProps } from "@mantine/dates";
 
 /**
  * Component props mapping for different input types
@@ -25,6 +26,7 @@ export type ComponentPropsMap = {
   select: SelectProps & { options?: { value: string; label: string }[] };
   checkbox: CheckboxProps;
   switch: SwitchProps;
+  date: DateInputProps;
 };
 
 /**
@@ -70,6 +72,9 @@ const mapComponent = {
   select: (props: SelectProps) => <Select {...props} />,
   checkbox: (props: CheckboxProps) => <Checkbox {...props} />,
   switch: (props: SwitchProps) => <Switch {...props} />,
+  date: (props: DateInputProps) => (
+    <DateInput {...props} value={props.value ? new Date(props.value) : null} />
+  ),
 };
 
 /**
