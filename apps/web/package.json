@@ -1,0 +1,41 @@
+{
+  "name": "@kinship/web",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "@kinship/web",
+    "tags": [
+      "app"
+    ]
+  },
+  "dependencies": {
+    "@mantine/code-highlight": "^7.17.4",
+    "@mantine/core": "^7.17.4",
+    "@mantine/dates": "^7.17.4",
+    "@mantine/dropzone": "^7.17.4",
+    "@mantine/hooks": "^7.17.4",
+    "@mantine/modals": "^7.17.4",
+    "@mantine/notifications": "^7.17.4",
+    "@mantine/nprogress": "^7.17.4",
+    "@mantine/spotlight": "^7.17.4",
+    "@mantine/tiptap": "^7.17.4",
+    "@tiptap/extension-link": "^2.11.7",
+    "@tiptap/pm": "^2.11.7",
+    "@tiptap/react": "^2.11.7",
+    "@tiptap/starter-kit": "^2.11.7",
+    "dayjs": "^1.11.13",
+    "eslint-config-mantine": "^4.0.3",
+    "lucide-react": "^0.503.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.0",
+    "ulid": "^3.0.0",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "@kinship/family-tree": "workspace:*"
+  }
+}
