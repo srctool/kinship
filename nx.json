@@ -71,6 +71,11 @@
     }
   ],
   "release": {
+    "projects": ["apps/*", "libs/*"],
+    "releaseTagPattern": "release/{version}",
+    "git": {
+      "commitMessage": "chore(release): {version}"
+    },
     "version": {
       "preVersionCommand": "pnpm dlx nx run-many -t build"
     },
