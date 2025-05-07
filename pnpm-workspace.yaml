@@ -2,10 +2,10 @@ packages:
   - packages/*
   - libs/*
   - apps/*
-
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@parcel/watcher'
   - '@swc/core'
   - core-js
   - esbuild
+  - nx

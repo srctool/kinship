@@ -46,7 +46,7 @@ const PersonForm = ({ initialValues }: { initialValues?: PersonFormProps }) => {
             <FormInputWrapper key={`${props.name}-${index}`} {...props} />
           ))}
 
-          <Group grow mt="auto">
+          <Group grow mt="md">
             <Button variant="light" onClick={() => setSelectedPerson('')}>
               Cancel
             </Button>
