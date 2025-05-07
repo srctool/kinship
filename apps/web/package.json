@@ -1,0 +1,46 @@
+{
+  "name": "@kinship/web",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "@kinship/web",
+    "tags": [
+      "app"
+    ]
+  },
+  "dependencies": {
+    "@mantine/core": "^8.0.0",
+    "@mantine/dates": "^8.0.0",
+    "@mantine/dropzone": "^8.0.0",
+    "@mantine/hooks": "^8.0.0",
+    "@mantine/modals": "^8.0.0",
+    "@mantine/notifications": "^8.0.0",
+    "@mantine/nprogress": "^8.0.0",
+    "@mantine/spotlight": "^8.0.0",
+    "@mantine/tiptap": "^8.0.0",
+    "@tanstack/react-query": "^5.75.5",
+    "@tanstack/react-query-devtools": "^5.75.5",
+    "@tanstack/react-router": "^1.120.2",
+    "@tanstack/react-router-devtools": "^1.120.2",
+    "@tiptap/extension-link": "^2.11.7",
+    "@tiptap/pm": "^2.11.7",
+    "@tiptap/react": "^2.11.7",
+    "@tiptap/starter-kit": "^2.11.7",
+    "dayjs": "^1.11.13",
+    "eslint-config-mantine": "^4.0.3",
+    "graphql-request": "^7.1.2",
+    "lucide-react": "^0.508.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.2",
+    "ulid": "^3.0.0",
+    "zustand": "^5.0.4"
+  },
+  "devDependencies": {
+    "@kinship/family-tree": "workspace:*",
+    "@tanstack/router-plugin": "^1.120.2",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1"
+  }
+}
