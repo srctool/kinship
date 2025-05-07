@@ -73,6 +73,9 @@
   "release": {
     "version": {
       "preVersionCommand": "pnpm dlx nx run-many -t build"
+    },
+    "changelog": {
+      "projectChangelogs": true
     }
   },
   "generators": {
