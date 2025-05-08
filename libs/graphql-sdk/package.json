@@ -1,0 +1,61 @@
+{
+  "name": "@kinship/graphql-sdk",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "sourceRoot": "libs/graphql-sdk/src",
+    "targets": {
+      "build": {
+        "executor": "@nx/js:swc",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "libs/graphql-sdk/dist",
+          "main": "libs/graphql-sdk/src/index.ts",
+          "tsConfig": "libs/graphql-sdk/tsconfig.lib.json",
+          "skipTypeCheck": true,
+          "stripLeadingPaths": true
+        }
+      }
+    },
+    "tags": [
+      "lib"
+    ]
+  },
+  "dependencies": {
+    "@swc/helpers": "~0.5.11",
+    "@graphql-codegen/cli": "5.0.6",
+    "graphql-request": "6.1.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.6",
+    "@graphql-codegen/introspection": "4.0.3",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-graphql-request": "^6.2.0",
+    "@graphql-codegen/typescript-operations": "^4.6.1",
+    "graphql": "^16.11.0",
+    "graphql-request": "^6.1.0"
+  },
+  "scripts": {
+    "codegen:i": "graphql-codegen --config src/config/introspection.ts",
+    "codegen:c": "graphql-codegen --config src/config/codegen.ts",
+    "codegen": "pnpm codegen:i && pnpm codegen:c"
+  },
+  "overrides": {
+    "graphql-request": "6.1.0"
+  }
+}
