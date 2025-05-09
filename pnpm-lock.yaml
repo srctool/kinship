@@ -285,7 +285,7 @@ importers:
         specifier: ~0.5.11
         version: 0.5.17
       graphql-request:
-        specifier: ^6.1.0
+        specifier: 6.1.0
         version: 6.1.0(encoding@0.1.13)(graphql@16.11.0)
     devDependencies:
       '@graphql-codegen/introspection':
