@@ -3,6 +3,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../libs/graphql-sdk"
+    },
+    {
       "path": "../../libs/family-tree"
     },
     {

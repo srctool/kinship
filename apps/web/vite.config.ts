@@ -11,7 +11,11 @@ export default defineConfig(() => ({
     port: 4200,
     host: 'localhost',
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/graphql': {
+        target: 'https://koa-graphql.vercel.app',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   preview: {
@@ -36,5 +40,6 @@ export default defineConfig(() => ({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+    chunkSizeWarningLimit: 1024,
   },
 }));
