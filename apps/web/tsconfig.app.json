@@ -36,6 +36,9 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
+      "path": "../../libs/graphql-sdk/tsconfig.lib.json"
+    },
+    {
       "path": "../../libs/family-tree/tsconfig.lib.json"
     }
   ]

@@ -1,11 +1,13 @@
 packages:
-  - packages/*
-  - libs/*
-  - apps/*
-
+  - 'packages/*'
+  - 'libs/*'
+  - 'apps/*'
+  - 'apps/web/*'
+  - 'graphql-sdk'
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@parcel/watcher'
   - '@swc/core'
-  - core-js
-  - esbuild
+  - 'core-js'
+  - 'esbuild'
+  - 'nx'
