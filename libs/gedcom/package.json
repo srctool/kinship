@@ -1,0 +1,38 @@
+{
+  "name": "@kinship/gedcom",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "!**/*.tsbuildinfo"
+  ],
+  "nx": {
+    "name": "@kinship/gedcom",
+    "tags": [
+      "lib"
+    ]
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
+    "fs": "0.0.1-security",
+    "jest": "^29.7.0",
+    "path": "^0.12.7",
+    "ts-jest": "^29.3.2"
+  }
+}
