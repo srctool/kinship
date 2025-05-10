@@ -209,17 +209,11 @@ export function parseGedcomTextToNodes(text: string): GEDCOMNode[] {
   const root: GEDCOMNode[] = [];
 
   for (const line of lines) {
-    const trimmedLine = line.trim();
+    const trimmedLine = line.trim(); // Menghapus whitespace di depan dan belakang
     if (!trimmedLine) continue;
 
-    // Pola regex untuk parsing:
-    // ^(\d+) level
-    // \s+
-    // (@[^@]+@)? xref ID
-    // \s*
-    // ([A-Z0-9_]+) tag
-    // (?:\s+(.*))? value
-    const match = line.match(/^(\d+)\s+(@[^@]+@)?\s*([A-Z0-9_]+)(?:\s+(.*))?$/);
+    // Memperhitungkan indentasi dan menggunakan regex yang telah diperbarui
+    const match = trimmedLine.match(/^(\d+)\s+(@[^@]+@)?\s*([A-Z0-9_]+)(?:\s*(.*))?$/);
 
     if (!match) {
       console.warn('Unrecognized GEDCOM line format:', line);
@@ -235,6 +229,11 @@ export function parseGedcomTextToNodes(text: string): GEDCOMNode[] {
       value: xref ? xref : value?.trim(),
       children: [],
     };
+
+    // Memastikan tag HEAD, CHAR, SOUR, TRLR dikenali meskipun tidak memiliki value
+    if (['HEAD', 'CHAR', 'SOUR', 'TRLR'].includes(tag) && !value) {
+      node.value = undefined;
+    }
 
     // Pop stack sampai ketemu parent dengan level < current level
     while (stack.length > 0 && (stack[stack.length - 1]?.level ?? -1) >= level) {

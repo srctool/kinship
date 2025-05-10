@@ -3,13 +3,14 @@ import * as path from 'path';
 import { describe, expect, it } from '@jest/globals';
 import {
   convertToGedcomTreeFromGedcomX,
+  convertToGedcomX,
   formatGedcomDate,
   formatGedcomTime,
   nodeToGedcom,
   parseGedcomNodes,
   parseGedcomTextToNodes,
 } from '../../src/parser/parse-gedcom';
-import { GEDCOMNode } from '../../src/types/gedcom/gedcom';
+import { GEDCOMNode, ParsedGedcom } from '../../src/types/gedcom/gedcom';
 
 describe('parseGedcomTextToNodes', () => {
   it('should correctly parse a sample .ged text into nested GEDCOMNode structure', () => {
@@ -571,5 +572,183 @@ describe('Gedcom Conversion Tests', () => {
 
     // Bandingkan hasil konversi dengan output yang diharapkan
     // expect(gedcomString.trim()).toBe(expectedGedcomOutput.trim());
+  });
+});
+
+describe('convertToGedcomX', () => {
+  it('should convert parsed gedcom to GedcomX format', () => {
+    const parsedGedcom: ParsedGedcom = {
+      individuals: {
+        '@I1@': {
+          id: '@I1@',
+          names: [{ full: 'John Doe', given: 'John', surname: 'Doe' }],
+          gender: 'M',
+          facts: [{ type: 'BIRT', date: '01 JAN 1980', place: 'New York' }],
+          familiesAsSpouse: [],
+          familyAsChild: undefined,
+          notes: [],
+        },
+      },
+      families: {},
+      sources: {},
+      repositories: {},
+      media: {},
+      notes: {},
+      places: {},
+      citations: {},
+    };
+
+    const gedcomX = convertToGedcomX(parsedGedcom);
+
+    // Memeriksa apakah konversi menghasilkan array persons dengan length 1
+    expect(gedcomX.persons).toHaveLength(1);
+
+    // Memeriksa apakah data pertama dalam persons sesuai dengan data yang diharapkan
+    expect(gedcomX.persons[0]).toEqual({
+      id: '@I1@',
+      names: [
+        {
+          nameForms: [{ fullText: 'John Doe' }],
+        },
+      ],
+      gender: { type: 'http://gedcomx.org/Male' },
+      facts: [
+        {
+          type: 'http://gedcomx.org/Birth',
+          date: { original: '01 JAN 1980' },
+          place: { original: 'New York' },
+        },
+      ],
+    });
+  });
+
+  it('should handle empty parsedGedcom', () => {
+    const parsedGedcom: ParsedGedcom = {
+      individuals: {},
+      families: {},
+      sources: {},
+      repositories: {},
+      media: {},
+      notes: {},
+      places: {},
+      citations: {},
+    };
+
+    const gedcomX = convertToGedcomX(parsedGedcom);
+
+    // Memeriksa apakah konversi menghasilkan array persons kosong
+    expect(gedcomX.persons).toHaveLength(0);
+  });
+
+  // Test untuk kasus lainnya, seperti jika ada keluarga (fam) atau sumber (source)
+  it('should handle families and relationships', () => {
+    const parsedGedcom: ParsedGedcom = {
+      individuals: {
+        '@I1@': {
+          id: '@I1@',
+          names: [{ full: 'John Doe', given: 'John', surname: 'Doe' }],
+          gender: 'M',
+          facts: [],
+          familiesAsSpouse: ['@F1@'],
+          familyAsChild: undefined,
+          notes: [],
+        },
+        '@I2@': {
+          id: '@I2@',
+          names: [{ full: 'Jane Smith', given: 'Jane', surname: 'Smith' }],
+          gender: 'F',
+          facts: [],
+          familiesAsSpouse: ['@F1@'],
+          familyAsChild: undefined,
+          notes: [],
+        },
+      },
+      families: {
+        '@F1@': {
+          id: '@F1@',
+          husbandId: '@I1@',
+          wifeId: '@I2@',
+          childIds: [],
+          facts: [],
+          notes: [],
+        },
+      },
+      sources: {},
+      repositories: {},
+      media: {},
+      notes: {},
+      places: {},
+      citations: {},
+    };
+
+    const gedcomX = convertToGedcomX(parsedGedcom);
+
+    // Memeriksa apakah hubungan pasangan terbentuk
+    expect(gedcomX.relationships).toHaveLength(1);
+    expect(gedcomX.relationships[0]).toEqual({
+      type: 'http://gedcomx.org/Couple',
+      person1: { resource: '#@I1@' },
+      person2: { resource: '#@I2@' },
+      facts: [],
+    });
+  });
+});
+
+describe('convertToGedcomX with GEDCOM string input', () => {
+  it('should parse GEDCOM string and convert it to GedcomX format', () => {
+    const gedcomString = `
+0 HEAD
+        1 CHAR UTF-8
+        1 SOUR Test Source
+        0 @I1@ INDI
+        1 NAME John /Doe/
+        1 SEX M
+        1 BIRT
+        2 DATE 1 JAN 1980
+        2 PLAC New York
+        0 TRLR
+      `;
+
+    // Langkah pertama: parse string GEDCOM menjadi objek
+    const nodes = parseGedcomTextToNodes(gedcomString);
+
+    const check1 = parseGedcomNodes(nodes);
+
+    // // Langkah kedua: konversi objek parsedGedcom ke GedcomX
+    const gedcomX = convertToGedcomX(check1);
+
+    // // Memeriksa apakah konversi menghasilkan array persons dengan length 1
+    expect(gedcomX.persons).toHaveLength(1);
+
+    // // Memeriksa apakah data pertama dalam persons sesuai dengan data yang diharapkan
+    expect(gedcomX.persons[0]).toEqual({
+      id: '@I1@',
+      names: [
+        {
+          nameForms: [{ fullText: 'John /Doe/' }],
+        },
+      ],
+      gender: { type: 'http://gedcomx.org/Male' },
+      facts: [
+        {
+          type: 'http://gedcomx.org/Birth',
+          date: { original: '1 JAN 1980' },
+          place: { original: 'New York' },
+        },
+      ],
+    });
+  });
+
+  it('should handle empty GEDCOM string gracefully', () => {
+    const gedcomString = '';
+
+    // Parse string GEDCOM kosong
+    const gedcomNode = parseGedcomTextToNodes(gedcomString);
+
+    // Konversi ke GedcomX
+    const gedcomX = convertToGedcomX(parseGedcomNodes(gedcomNode));
+
+    // Memeriksa apakah konversi menghasilkan array persons kosong
+    expect(gedcomX.persons).toHaveLength(0);
   });
 });
