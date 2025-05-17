@@ -19,6 +19,10 @@ import { Agent } from './agent';
  *
  */
 
+// temp fix
+
+export type Document = string;
+
 // Enum for ResourceType as per GEDCOM X specifications
 export enum ResourceType {
   /**
