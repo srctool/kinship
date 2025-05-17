@@ -568,10 +568,10 @@ describe('Gedcom Conversion Tests', () => {
     const gedcomTree = convertToGedcomTreeFromGedcomX(gedcomXData);
     const gedcomString = nodeToGedcom(gedcomTree);
 
-    console.log(gedcomString);
+    // console.log(gedcomString);
 
     // Bandingkan hasil konversi dengan output yang diharapkan
-    // expect(gedcomString.trim()).toBe(expectedGedcomOutput.trim());
+    expect(gedcomString.trim()).toBe(expectedGedcomOutput.trim());
   });
 });
 
@@ -750,5 +750,67 @@ describe('convertToGedcomX with GEDCOM string input', () => {
 
     // Memeriksa apakah konversi menghasilkan array persons kosong
     expect(gedcomX.persons).toHaveLength(0);
+  });
+});
+
+describe('GEDCOM string with adoption', () => {
+  it('should convert GEDCOM with adopted child into GEDCOM X adoptive relationship', () => {
+    const gedcomInput = `
+  0 @I1@ INDI
+  1 NAME John /Doe/
+  1 FAMC @F1@
+  2 PEDI ADOPTED
+  0 @I2@ INDI
+  1 NAME Father /Doe/
+  0 @I3@ INDI
+  1 NAME Mother /Doe/
+  0 @F1@ FAM
+  1 HUSB @I2@
+  1 WIFE @I3@
+  1 CHIL @I1@
+  `.trim();
+
+    const tree = parseGedcomTextToNodes(gedcomInput);
+
+    // if (tree[0]?.children?.[1]) {
+    // console.log(tree[0].children?.[1]);
+    // } else {
+    //     console.warn('tree[0].children[1] is undefined');
+    // }
+
+    const gedcomX = convertToGedcomX(parseGedcomNodes(tree));
+
+    // expect(gedcomX.relationships).toEqual(expect.arrayContaining([
+    //     expect.objectContaining({
+    //         person1: { resource: "#@I2@" },
+    //         person2: { resource: "#@I3@" },
+    //         type: "http://gedcomx.org/Couple"
+    //     }),
+    //     expect.objectContaining({
+    //         person1: { resource: "#@I2@" },
+    //         person2: { resource: "#@I1@" },
+    //         type: "http://gedcomx.org/ParentChild"
+    //     }),
+    //     expect.objectContaining({
+    //         person1: { resource: "#@I3@" },
+    //         person2: { resource: "#@I1@" },
+    //         type: "http://gedcomx.org/ParentChild"
+    //     })
+    //   ]));
+
+    expect(gedcomX.relationships).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'http://gedcomx.org/AdoptiveParent',
+          person1: { resource: '#I2' },
+          person2: { resource: '#I1' },
+        }),
+        expect.objectContaining({
+          type: 'http://gedcomx.org/AdoptiveParent',
+          person1: { resource: '#I3' },
+          person2: { resource: '#I1' },
+        }),
+      ])
+    );
   });
 });
