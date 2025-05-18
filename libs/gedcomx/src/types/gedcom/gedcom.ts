@@ -10,6 +10,7 @@ export interface GEDCOMNode {
   tag: string;
   value?: string;
   children?: GEDCOMNode[];
+  pointer?: string; // tbd type
 }
 
 /**

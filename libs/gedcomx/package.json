@@ -1,13 +1,10 @@
 {
-  "name": "@kinship/gedcom",
+  "name": "@kinship/gedcomx",
   "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "scripts": {
-    "test": "jest"
-  },
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -22,17 +19,22 @@
     "!**/*.tsbuildinfo"
   ],
   "nx": {
-    "name": "@kinship/gedcom",
     "tags": [
       "lib"
-    ]
+    ],
+    "targets": {
+      "test": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "libs/gedcomx/jest.config.ts"
+        }
+      }
+    }
   },
-  "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@types/jest": "^29.5.14",
-    "fs": "0.0.1-security",
-    "jest": "^29.7.0",
-    "path": "^0.12.7",
-    "ts-jest": "^29.3.2"
+  "dependencies": {
+    "tslib": "^2.3.0"
   }
 }
