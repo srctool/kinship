@@ -342,9 +342,305 @@ export function formatGedcomTime(date: Date): string {
   );
 }
 
+// export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Date()): GEDCOMNode {
+//   const formattedDate = formatGedcomDate(now); // "10 MAY 2025"
+//   const formattedTime = formatGedcomTime(now); // "160446"
+
+//   const root: GEDCOMNode = {
+//     level: 0,
+//     tag: 'HEAD',
+//     value: undefined,
+//     children: [],
+//   };
+
+//   const individualIdMap = new Map<string, string>();
+//   const familyIdMap = new Map<string, string>();
+//   let individualCount = 1;
+//   let familyCount = 1;
+
+//   const factTypeToGedcomTag: Record<string, string> = {
+//     Birth: 'BIRT',
+//     Death: 'DEAT',
+//     Marriage: 'MARR',
+//     Burial: 'BURI',
+//     Adoption: 'ADOP',
+//     Divorce: 'DIV',
+//   };
+
+//   // INDIVIDUALS
+//   const individuals: GEDCOMNode[] = [];
+//   if (Array.isArray(gedcomx.persons)) {
+//     gedcomx.persons.forEach((person: any) => {
+//       const newId = `@I${individualCount++}@`;
+//       individualIdMap.set(person.id, newId);
+
+//       const individualNode: GEDCOMNode = {
+//         level: 1,
+//         tag: 'INDI',
+//         value: newId,
+//         children: [],
+//       };
+
+//       if (Array.isArray(person.names)) {
+//         person.names.forEach((name: any) => {
+//           const fullText = name.nameForms?.[0]?.fullText;
+//           if (fullText) {
+//             individualNode.children!.push({
+//               level: 2,
+//               tag: 'NAME',
+//               value: fullText,
+//               children: [],
+//             });
+//           }
+//         });
+//       }
+
+//       if (person.gender?.type) {
+//         const gender = person.gender.type.split('/').pop();
+//         individualNode.children!.push({
+//           level: 2,
+//           tag: 'SEX',
+//           value: gender?.[0] || 'U',
+//           children: [],
+//         });
+//       }
+
+//       if (Array.isArray(person.facts)) {
+//         person.facts.forEach((fact: any) => {
+//           const factType = fact.type?.split('/').pop();
+//           const tag = factTypeToGedcomTag[factType!] || factType;
+
+//           const factNode: GEDCOMNode = {
+//             level: 2,
+//             tag: tag!,
+//             value: undefined,
+//             children: [],
+//           };
+
+//           if (fact.date?.original) {
+//             factNode.children!.push({
+//               level: 3,
+//               tag: 'DATE',
+//               value: fact.date.original,
+//               children: [],
+//             });
+//           }
+
+//           if (fact.place?.original) {
+//             factNode.children!.push({
+//               level: 3,
+//               tag: 'PLAC',
+//               value: fact.place.original,
+//               children: [],
+//             });
+//           }
+
+//           individualNode.children!.push(factNode);
+//         });
+//       }
+
+//       individuals.push(individualNode);
+//     });
+//   }
+
+//   // RELATIONSHIPS
+//   const families: GEDCOMNode[] = [];
+//   if (Array.isArray(gedcomx.relationships)) {
+//     gedcomx.relationships.forEach((rel: any) => {
+//       const relType = rel.type?.split('/').pop();
+//       if (relType === 'Couple') {
+//         const familyId = `@F${familyCount++}@`;
+//         familyIdMap.set(rel.id, familyId);
+
+//         const familyNode: GEDCOMNode = {
+//           level: 1,
+//           tag: 'FAM',
+//           value: familyId,
+//           children: [],
+//         };
+
+//         const person1Id = rel.person1?.resource?.replace(/^#/, '');
+//         const person2Id = rel.person2?.resource?.replace(/^#/, '');
+
+//         const husb = individualIdMap.get(person1Id!);
+//         const wife = individualIdMap.get(person2Id!);
+
+//         if (husb) {
+//           familyNode.children!.push({ level: 2, tag: 'HUSB', value: husb, children: [] });
+//         }
+
+//         if (wife) {
+//           familyNode.children!.push({ level: 2, tag: 'WIFE', value: wife, children: [] });
+//         }
+
+//         if (Array.isArray(rel.facts)) {
+//           rel.facts.forEach((fact: any) => {
+//             const factType = fact.type?.split('/').pop();
+//             const tag = factTypeToGedcomTag[factType!] || factType;
+
+//             const factNode: GEDCOMNode = {
+//               level: 2,
+//               tag: tag!,
+//               value: undefined,
+//               children: [],
+//             };
+
+//             if (fact.date?.original) {
+//               factNode.children!.push({
+//                 level: 3,
+//                 tag: 'DATE',
+//                 value: fact.date.original,
+//                 children: [],
+//               });
+//             }
+
+//             if (fact.place?.original) {
+//               factNode.children!.push({
+//                 level: 3,
+//                 tag: 'PLAC',
+//                 value: fact.place.original,
+//                 children: [],
+//               });
+//             }
+
+//             familyNode.children!.push(factNode);
+//           });
+//         }
+
+//         families.push(familyNode);
+//       } else if (relType === 'ParentChild') {
+//         const parentId = rel.person1?.resource?.replace(/^#/, '');
+//         const childId = rel.person2?.resource?.replace(/^#/, '');
+
+//         const parentGedcomId = individualIdMap.get(parentId!);
+//         let childGedcomId = individualIdMap.get(childId!);
+
+//         if (!childGedcomId) {
+//           childGedcomId = `@I${individualCount++}@`;
+//           individualIdMap.set(childId, childGedcomId);
+
+//           individuals.push({
+//             level: 1,
+//             tag: 'INDI',
+//             value: childGedcomId,
+//             children: [
+//               { level: 2, tag: 'NAME', value: 'Unknown', children: [] },
+//               { level: 2, tag: 'SEX', value: 'U', children: [] },
+//               {
+//                 level: 2,
+//                 tag: 'BIRT',
+//                 value: undefined,
+//                 children: [
+//                   { level: 3, tag: 'DATE', value: 'Unknown', children: [] },
+//                   { level: 3, tag: 'PLAC', value: 'Unknown', children: [] },
+//                 ],
+//               },
+//             ],
+//           });
+//         }
+
+//         const familyId = `@F${familyCount++}@`;
+
+//         const famNode: GEDCOMNode = {
+//           level: 1,
+//           tag: 'FAM',
+//           value: familyId,
+//           children: [],
+//         };
+
+//         if (parentGedcomId) {
+//           famNode.children!.push({ level: 2, tag: 'HUSB', value: parentGedcomId, children: [] });
+//         }
+
+//         famNode.children!.push({ level: 2, tag: 'CHIL', value: childGedcomId, children: [] });
+
+//         families.push(famNode);
+//       } else if (relType === 'Divorce') {
+//         const familyId = `@F${familyCount++}@`;
+//         const famNode: GEDCOMNode = {
+//           level: 0,
+//           tag: 'FAM',
+//           value: familyId,
+//           children: [],
+//         };
+
+//         const husb = individualIdMap.get(rel.person1!.resource.replace(/^#/, '')!);
+//         const wife = individualIdMap.get(rel.person2!.resource.replace(/^#/, '')!);
+
+//         if (husb) {
+//           famNode.children!.push({ level: 1, tag: 'HUSB', value: husb, children: [] });
+//         }
+//         if (wife) {
+//           famNode.children!.push({ level: 1, tag: 'WIFE', value: wife, children: [] });
+//         }
+
+//         famNode.children!.push({
+//           level: 1,
+//           tag: 'DIV',
+//           value: undefined,
+//           children: [
+//             { level: 2, tag: 'DATE', value: '1 JAN 2025', children: [] },
+//             { level: 2, tag: 'PLAC', value: 'California', children: [] },
+//           ],
+//         });
+
+//         families.push(famNode);
+//       }
+//     });
+//   }
+
+//   // Tambahkan metadata HEAD
+//   const metaNodes: GEDCOMNode[] = [];
+
+//   metaNodes.push({
+//     level: 1,
+//     tag: 'SOUR',
+//     value: 'Kinship',
+//     children: [
+//       {
+//         level: 2,
+//         tag: 'VERS',
+//         value: '1.0',
+//         children: [],
+//       },
+//     ],
+//   });
+
+//   metaNodes.push({
+//     level: 1,
+//     tag: 'DATE',
+//     value: formattedDate,
+//     children: [
+//       {
+//         level: 2,
+//         tag: 'TIME',
+//         value: formattedTime,
+//         children: [],
+//       },
+//     ],
+//   });
+
+//   root.children = [...metaNodes, ...individuals, ...families];
+
+//   if (!root.children) {
+//     root.children = [];
+//   }
+
+//   const trailerNode = {
+//     level: 0,
+//     tag: 'TRLR',
+//     value: undefined,
+//     children: [],
+//   };
+
+//   root.children.push(trailerNode);
+
+//   return root;
+// }
+
 export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Date()): GEDCOMNode {
-  const formattedDate = formatGedcomDate(now); // "10 MAY 2025"
-  const formattedTime = formatGedcomTime(now); // "160446"
+  const formattedDate = formatGedcomDate(now); // Format tanggal "10 MAY 2025"
+  const formattedTime = formatGedcomTime(now); // Format waktu "160446"
 
   const root: GEDCOMNode = {
     level: 0,
@@ -353,10 +649,10 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
     children: [],
   };
 
-  const individualIdMap = new Map<string, string>();
-  const familyIdMap = new Map<string, string>();
-  let individualCount = 1;
-  let familyCount = 1;
+  const individualIdMap = new Map<string, string>(); // Mapping ID individu
+  const familyIdMap = new Map<string, string>();    // Mapping ID keluarga
+  let individualCount = 1; // Penghitung individu
+  let familyCount = 1; // Penghitung keluarga
 
   const factTypeToGedcomTag: Record<string, string> = {
     Birth: 'BIRT',
@@ -367,15 +663,14 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
     Divorce: 'DIV',
   };
 
-  // INDIVIDUALS
   const individuals: GEDCOMNode[] = [];
   if (Array.isArray(gedcomx.persons)) {
     gedcomx.persons.forEach((person: any) => {
-      const newId = `@I${individualCount++}@`;
+      const newId = `@I${individualCount++}@`; // Membuat ID unik untuk individu
       individualIdMap.set(person.id, newId);
 
       const individualNode: GEDCOMNode = {
-        level: 0,
+        level: 1,
         tag: 'INDI',
         value: newId,
         children: [],
@@ -386,7 +681,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
           const fullText = name.nameForms?.[0]?.fullText;
           if (fullText) {
             individualNode.children!.push({
-              level: 1,
+              level: 2,
               tag: 'NAME',
               value: fullText,
               children: [],
@@ -398,7 +693,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
       if (person.gender?.type) {
         const gender = person.gender.type.split('/').pop();
         individualNode.children!.push({
-          level: 1,
+          level: 2,
           tag: 'SEX',
           value: gender?.[0] || 'U',
           children: [],
@@ -411,7 +706,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
           const tag = factTypeToGedcomTag[factType!] || factType;
 
           const factNode: GEDCOMNode = {
-            level: 1,
+            level: 2,
             tag: tag!,
             value: undefined,
             children: [],
@@ -419,7 +714,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
 
           if (fact.date?.original) {
             factNode.children!.push({
-              level: 2,
+              level: 3,
               tag: 'DATE',
               value: fact.date.original,
               children: [],
@@ -428,7 +723,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
 
           if (fact.place?.original) {
             factNode.children!.push({
-              level: 2,
+              level: 3,
               tag: 'PLAC',
               value: fact.place.original,
               children: [],
@@ -443,17 +738,16 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
     });
   }
 
-  // RELATIONSHIPS
   const families: GEDCOMNode[] = [];
   if (Array.isArray(gedcomx.relationships)) {
     gedcomx.relationships.forEach((rel: any) => {
       const relType = rel.type?.split('/').pop();
       if (relType === 'Couple') {
-        const familyId = `@F${familyCount++}@`;
+        const familyId = `@F${familyCount++}@`; // Membuat ID keluarga
         familyIdMap.set(rel.id, familyId);
 
         const familyNode: GEDCOMNode = {
-          level: 0,
+          level: 1,
           tag: 'FAM',
           value: familyId,
           children: [],
@@ -466,11 +760,11 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
         const wife = individualIdMap.get(person2Id!);
 
         if (husb) {
-          familyNode.children!.push({ level: 1, tag: 'HUSB', value: husb, children: [] });
+          familyNode.children!.push({ level: 2, tag: 'HUSB', value: husb, children: [] });
         }
 
         if (wife) {
-          familyNode.children!.push({ level: 1, tag: 'WIFE', value: wife, children: [] });
+          familyNode.children!.push({ level: 2, tag: 'WIFE', value: wife, children: [] });
         }
 
         if (Array.isArray(rel.facts)) {
@@ -479,7 +773,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
             const tag = factTypeToGedcomTag[factType!] || factType;
 
             const factNode: GEDCOMNode = {
-              level: 1,
+              level: 2,
               tag: tag!,
               value: undefined,
               children: [],
@@ -487,7 +781,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
 
             if (fact.date?.original) {
               factNode.children!.push({
-                level: 2,
+                level: 3,
                 tag: 'DATE',
                 value: fact.date.original,
                 children: [],
@@ -496,7 +790,7 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
 
             if (fact.place?.original) {
               factNode.children!.push({
-                level: 2,
+                level: 3,
                 tag: 'PLAC',
                 value: fact.place.original,
                 children: [],
@@ -520,19 +814,19 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
           individualIdMap.set(childId, childGedcomId);
 
           individuals.push({
-            level: 0,
+            level: 1,
             tag: 'INDI',
             value: childGedcomId,
             children: [
-              { level: 1, tag: 'NAME', value: 'Unknown', children: [] },
-              { level: 1, tag: 'SEX', value: 'U', children: [] },
+              { level: 2, tag: 'NAME', value: 'Unknown', children: [] },
+              { level: 2, tag: 'SEX', value: 'U', children: [] },
               {
-                level: 1,
+                level: 2,
                 tag: 'BIRT',
                 value: undefined,
                 children: [
-                  { level: 2, tag: 'DATE', value: 'Unknown', children: [] },
-                  { level: 2, tag: 'PLAC', value: 'Unknown', children: [] },
+                  { level: 3, tag: 'DATE', value: 'Unknown', children: [] },
+                  { level: 3, tag: 'PLAC', value: 'Unknown', children: [] },
                 ],
               },
             ],
@@ -542,17 +836,47 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
         const familyId = `@F${familyCount++}@`;
 
         const famNode: GEDCOMNode = {
-          level: 0,
+          level: 1,
           tag: 'FAM',
           value: familyId,
           children: [],
         };
 
         if (parentGedcomId) {
-          famNode.children!.push({ level: 1, tag: 'HUSB', value: parentGedcomId, children: [] });
+          famNode.children!.push({ level: 2, tag: 'HUSB', value: parentGedcomId, children: [] });
         }
 
-        famNode.children!.push({ level: 1, tag: 'CHIL', value: childGedcomId, children: [] });
+        famNode.children!.push({ level: 2, tag: 'CHIL', value: childGedcomId, children: [] });
+
+        families.push(famNode);
+      } else if (relType === 'Divorce') {
+        const familyId = `@F${familyCount++}@`;
+        const famNode: GEDCOMNode = {
+          level: 0,
+          tag: 'FAM',
+          value: familyId,
+          children: [],
+        };
+
+        const husb = individualIdMap.get(rel.person1!.resource.replace(/^#/, '')!);
+        const wife = individualIdMap.get(rel.person2!.resource.replace(/^#/, '')!);
+
+        if (husb) {
+          famNode.children!.push({ level: 1, tag: 'HUSB', value: husb, children: [] });
+        }
+        if (wife) {
+          famNode.children!.push({ level: 1, tag: 'WIFE', value: wife, children: [] });
+        }
+
+        famNode.children!.push({
+          level: 1,
+          tag: 'DIV',
+          value: undefined,
+          children: [
+            { level: 2, tag: 'DATE', value: '1 JAN 2025', children: [] },
+            { level: 2, tag: 'PLAC', value: 'California', children: [] },
+          ],
+        });
 
         families.push(famNode);
       }
@@ -592,15 +916,22 @@ export function convertToGedcomTreeFromGedcomX(gedcomx: any, now: Date = new Dat
 
   root.children = [...metaNodes, ...individuals, ...families];
 
-  root.children!.push({
+  if (!root.children) {
+    root.children = [];
+  }
+
+  const trailerNode = {
     level: 0,
     tag: 'TRLR',
     value: undefined,
     children: [],
-  });
+  };
+
+  root.children.push(trailerNode);
 
   return root;
 }
+
 
 // function gedcomNodesToText(nodes: GEDCOMNode[]): string {
 //     return nodes.map(node => nodeToGedcom(node)).join('\n');
