@@ -11,6 +11,7 @@ import { SourceCitation } from '../component-level/source-citation';
 import { SourceReference } from '../component-level/source-reference';
 import { TextValue } from '../component-level/text-value';
 import { Agent } from './agent';
+import { Document } from './document';
 
 /**
  * Known Resource Types
@@ -19,9 +20,6 @@ import { Agent } from './agent';
  *
  */
 
-// temp fix
-
-export type Document = string;
 
 // Enum for ResourceType as per GEDCOM X specifications
 export enum ResourceType {
